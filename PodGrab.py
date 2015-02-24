@@ -439,26 +439,19 @@ def write_podcast(item, channel_title, date, type):
 	else:
 		print "\nDownloading " + item_file_name + " which was published on " + date
 		try:
+			#2015-02-24 new method of downloading files, chunked to save memory.
 			req = urllib2.urlopen(item)
 			CHUNK = 16 * 1024
 			with open(local_file, 'wb') as fp:
-			  while True:
-			    chunk = req.read(CHUNK)
-			    if not chunk: break
-			    fp.write(chunk)
+				while True:
+					chunk = req.read(CHUNK)
+					if not chunk: break
+					fp.write(chunk)
 
-			item_file_name = os.path.basename(fp.name)
-
-			#item_file = urllib2.urlopen(item)
-			#output = open(local_file, 'wb')
-			# 2011-10-06 Werner Avenant - For some reason the file name changes when
-			# saved to disk - probably a python feature (sorry, only wrote my first line of python today)
-			#item_file_name = os.path.basename(output.name)
-			#output.write(item_file.read())
-			#output.close()
 			print "Podcast: ", item, " downloaded to: ", local_file
 
 			# 2011-11-06 Append to m3u file
+			item_file_name = os.path.basename(fp.name)
 			output = open(current_directory + os.sep + m3u_file, 'a')
 			output.write(DOWNLOAD_DIRECTORY + os.sep + channel_title + os.sep + item_file_name + "\n")
 			output.close()
