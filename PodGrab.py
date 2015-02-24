@@ -34,6 +34,7 @@ from email.mime.text import MIMEText
 import platform
 import traceback
 import unicodedata
+import time
 
 
 MODE_NONE = 70
@@ -440,13 +441,17 @@ def write_podcast(item, channel_title, date, type):
 		print "\nDownloading " + item_file_name + " which was published on " + date
 		try:
 			#2015-02-24 new method of downloading files, chunked to save memory.
+			start = time.time()
 			req = urllib2.urlopen(item)
-			CHUNK = 16 * 1024
+			CHUNK = 8 * 1024
 			with open(local_file, 'wb') as fp:
 				while True:
 					chunk = req.read(CHUNK)
 					if not chunk: break
 					fp.write(chunk)
+
+			end = time.time()
+			print "This took ", end - start, " seconds"
 
 			print "Podcast: ", item, " downloaded to: ", local_file
 
