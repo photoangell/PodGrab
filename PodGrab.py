@@ -55,6 +55,9 @@ NUM_MAX_DOWNLOADS = 4
 # 2015-02-21 changed directory for the router - need to change a reference later
 DOWNLOAD_DIRECTORY = "/mnt/router/Music/Podcasts"
 
+# size of each download segment
+CHUNK = 6 * 1024
+
 # Added 2011-10-06 Werner Avenant - added current_dictory here so it can be global
 current_directory = ''
 m3u_file = ''
@@ -443,7 +446,6 @@ def write_podcast(item, channel_title, date, type):
 			#2015-02-24 new method of downloading files, chunked to save memory.
 			start = time.time()
 			req = urllib2.urlopen(item)
-			CHUNK = 8 * 1024
 			with open(local_file, 'wb') as fp:
 				while True:
 					chunk = req.read(CHUNK)
